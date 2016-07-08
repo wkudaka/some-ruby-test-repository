@@ -33,8 +33,12 @@ module MeshValidation
 
         if !line.valid?
 
-          line.errors.messages.each do |key, message|
-            @lines_errors << "Line:#{line_index+1} - #{message}"
+          line.errors.messages.each do |key, messages|
+
+            messages.each do |msg|
+              @lines_errors << "Line:#{line_index+1} - #{key}: #{msg}"
+            end
+
           end
 
         end

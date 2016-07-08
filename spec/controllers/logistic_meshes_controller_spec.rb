@@ -9,7 +9,7 @@ RSpec.describe LogisticMeshesController, type: :controller do
       mesh_params = build(:valid_mesh)
 
       post :create, mesh_params, format: :json
-      expect(response).to have_http_status(200)
+      expect(response).to have_http_status(201)
 
 
       map = Map.where(:name => mesh_params[:name]).first
@@ -29,12 +29,9 @@ RSpec.describe LogisticMeshesController, type: :controller do
 
       #first map
       post :create, mesh_params, format: :json
-      expect(response).to have_http_status(200)
 
       #second map
       post :create, mesh_params, format: :json
-      expect(response).to have_http_status(200)
-
 
       map = Map.last_version_by_name(mesh_params[:name])
       expect(map.version).to eq(2)
@@ -52,6 +49,48 @@ RSpec.describe LogisticMeshesController, type: :controller do
       post :create, mesh_params, format: :json
       expect(response).to have_http_status(422)
 
+      #a map cant be created if is invalid....
+      map = Map.where(:name => mesh_params[:name]).first
+      expect(map).to be(nil)
+
+    end
+
+
+    it 'should return a error if the mesh has a negative distance' do
+
+      mesh_params = build(:mesh_with_negative_distance)
+
+      post :create, mesh_params, format: :json
+      expect(response).to have_http_status(422)
+
+      #a map cant be created if is invalid....
+      map = Map.where(:name => mesh_params[:name]).first
+      expect(map).to be(nil)
+
+    end
+
+
+    it 'should return a error if the mesh dont has a point' do
+
+      mesh_params = build(:mesh_without_a_point)
+
+      post :create, mesh_params, format: :json
+      expect(response).to have_http_status(422)
+
+      #a map cant be created if is invalid....
+      map = Map.where(:name => mesh_params[:name]).first
+      expect(map).to be(nil)
+
+    end
+
+    it 'should return a error if the map dont has a name' do
+
+      mesh_params = build(:map_without_name)
+
+      post :create, mesh_params, format: :json
+      expect(response).to have_http_status(422)
+
+      #a map cant be created if is invalid....
       map = Map.where(:name => mesh_params[:name]).first
       expect(map).to be(nil)
 

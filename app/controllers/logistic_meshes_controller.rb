@@ -6,23 +6,26 @@ class LogisticMeshesController < ApplicationController
 
     mesh = MeshValidation::Mesh.new(mesh_string)
 
-    #TODO: format responses
-    if mesh.valid?
+    map = Map.last_version_by_name(map_name)
+    map = Map.new(name:map_name) if map.nil?
 
-      map = Map.last_version_by_name(map_name)
-
-      map = Map.new if map.nil?
+    if map.valid? && mesh.valid?
 
       map.name = map_name
       map.points << mesh.get_points
       map.save
-      render json: {}
+
+      render json: {
+        message: "Successfully created!"
+      }, status: :created
     else
 
-      render json: {}, status: 422
+      errors_arr = map.errors.full_messages + mesh.lines_errors
+      render json: {
+        errors:errors_arr
+      }, status: 422
+      
     end
-
-
 
   end
 

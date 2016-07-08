@@ -16,6 +16,14 @@ FactoryGirl.define do
 
   ##################### invalid data ###################
 
+  path = fixture_file_path("simple_valid_mesh.txt")
+  factory :map_without_name, class: Hash do
+    name ""
+    mesh File.read(path)
+    initialize_with { attributes }
+  end
+
+
   #mesh_with_a_blank_point
   path = fixture_file_path("mesh_with_a_blank_point.txt")
   factory :mesh_with_a_blank_point, class: Hash do
