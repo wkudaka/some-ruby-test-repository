@@ -2,7 +2,10 @@ class LogisticMeshesController < ApplicationController
 
   def create
     map_name = params[:name]
-    mesh_string = params[:mesh]
+    mesh_file = params[:mesh]
+
+    mesh_string = mesh_file.read if mesh_file.respond_to?(:read)
+
 
     mesh = MeshValidation::Mesh.new(mesh_string)
 
@@ -24,7 +27,7 @@ class LogisticMeshesController < ApplicationController
       render json: {
         errors:errors_arr
       }, status: 422
-      
+
     end
 
   end

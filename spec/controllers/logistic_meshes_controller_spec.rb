@@ -7,7 +7,6 @@ RSpec.describe LogisticMeshesController, type: :controller do
     it 'creates a map with points' do
 
       mesh_params = build(:valid_mesh)
-
       post :create, mesh_params, format: :json
       expect(response).to have_http_status(201)
 
@@ -20,22 +19,11 @@ RSpec.describe LogisticMeshesController, type: :controller do
       expect(map.created_at).to be_instance_of(DateTime)
 
 
-    end
-
-
-    it 'creates a map with a updated version' do
-
-      mesh_params = build(:valid_mesh)
-
-      #first map
+      #maps with same name have a different version
+      mesh_params = build(:another_valid_mesh)
       post :create, mesh_params, format: :json
-
-      #second map
-      post :create, mesh_params, format: :json
-
       map = Map.last_version_by_name(mesh_params[:name])
       expect(map.version).to eq(2)
-
     end
 
   end
@@ -95,6 +83,19 @@ RSpec.describe LogisticMeshesController, type: :controller do
       expect(map).to be(nil)
 
     end
+
+    it 'should return a error if the mesh has a blank textfile' do
+
+      mesh_params = build(:mesh_blank)
+
+      post :create, mesh_params, format: :json
+      expect(response).to have_http_status(422)
+
+      #a map cant be created if is invalid....
+      map = Map.where(:name => mesh_params[:name]).first
+      expect(map).to be(nil)
+    end
+
 
   end
 

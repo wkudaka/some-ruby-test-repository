@@ -13,6 +13,11 @@ module MeshValidation
       @lines = []
       @lines_errors = []
 
+      if mesh_string.blank?
+        @lines_errors << "empty file"
+        return
+      end
+
       mesh_lines = mesh_string.split("\n")
       create_and_validate_lines(mesh_lines)
 
