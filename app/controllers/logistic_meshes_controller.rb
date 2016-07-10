@@ -1,5 +1,38 @@
 class LogisticMeshesController < ApplicationController
 
+  def index
+
+  end
+
+  def route
+    route_params = {
+      :map_name => params[:map_name],
+      :origin => params[:origin],
+      :destiny => params[:destiny],
+      :autonomy => params[:autonomy],
+      :liter_value => params[:liter_value]
+    }
+
+    route_info = MeshValidation::RouteInfo.new route_params
+
+    if route_info.has_map? && route_info.valid?
+
+      data = Map.get_cheapest_route(route_info)
+      render json: {
+        message: data.present? ? "Success!!" : "Path not found!",
+        data: data
+      }
+
+    else
+
+      render json: {
+        errors:route_info.errors.full_messages
+      }, status: 422
+
+    end
+  end
+
+
   def create
     map_name = params[:name]
     mesh_file = params[:mesh]

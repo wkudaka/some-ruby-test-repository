@@ -13,14 +13,14 @@ FactoryGirl.define do
   ##################### valid data #####################
   factory :valid_mesh, class: Hash do
     name "SP"
-    mesh get_file_to_upload("simple_valid_mesh.txt")
-    initialize_with { attributes }
-  end
+    mesh nil
 
-  factory :another_valid_mesh, class: Hash do
-    name "SP"
-    mesh get_file_to_upload("simple_valid_mesh2.txt")
+    after(:build) {|something|
+      # avoiding same instance of the object on build
+      something[:mesh] = get_file_to_upload("simple_valid_mesh.txt")
+    }
     initialize_with { attributes }
+
   end
 
 
@@ -28,35 +28,55 @@ FactoryGirl.define do
 
   factory :map_without_name, class: Hash do
     name ""
-    mesh get_file_to_upload("simple_valid_mesh.txt")
+    mesh nil
+    after(:build) {|something|
+      # avoiding same instance of the object on build
+      something[:mesh] = get_file_to_upload("simple_valid_mesh.txt")
+    }
     initialize_with { attributes }
   end
 
   #blank mesh
   factory :mesh_blank, class: Hash do
     name "SP"
-    mesh get_file_to_upload("mesh_blank.txt")
+    mesh nil
+    after(:build) {|something|
+      # avoiding same instance of the object on build
+      something[:mesh] = get_file_to_upload("mesh_blank.txt")
+    }
     initialize_with { attributes }
   end
 
   #mesh_with_a_blank_point
   factory :mesh_with_a_blank_point, class: Hash do
     name "SP"
-    mesh get_file_to_upload("mesh_with_a_blank_point.txt")
+    mesh nil
+    after(:build) {|something|
+      # avoiding same instance of the object on build
+      something[:mesh] = get_file_to_upload("mesh_with_a_blank_point.txt")
+    }
     initialize_with { attributes }
   end
 
   #mesh_with_negative_distance
   factory :mesh_with_negative_distance, class: Hash do
     name "SP"
-    mesh get_file_to_upload("mesh_with_negative_distance.txt")
+    mesh nil
+    after(:build) {|something|
+      # avoiding same instance of the object on build
+      something[:mesh] = get_file_to_upload("mesh_with_negative_distance.txt")
+    }
     initialize_with { attributes }
   end
 
   #mesh_without_a_point
   factory :mesh_without_a_point, class: Hash do
     name "SP"
-    mesh get_file_to_upload("mesh_without_a_point.txt")
+    mesh nil
+    after(:build) {|something|
+      # avoiding same instance of the object on build
+      something[:mesh] = get_file_to_upload("mesh_without_a_point.txt")
+    }
     initialize_with { attributes }
   end
 end

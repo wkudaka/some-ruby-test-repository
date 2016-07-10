@@ -7,6 +7,7 @@ RSpec.describe LogisticMeshesController, type: :controller do
     it 'creates a map with points' do
 
       mesh_params = build(:valid_mesh)
+      
       post :create, mesh_params, format: :json
       expect(response).to have_http_status(201)
 
@@ -20,7 +21,7 @@ RSpec.describe LogisticMeshesController, type: :controller do
 
 
       #maps with same name have a different version
-      mesh_params = build(:another_valid_mesh)
+      mesh_params = build(:valid_mesh)
       post :create, mesh_params, format: :json
       map = Map.last_version_by_name(mesh_params[:name])
       expect(map.version).to eq(2)
@@ -96,6 +97,199 @@ RSpec.describe LogisticMeshesController, type: :controller do
       expect(map).to be(nil)
     end
 
+
+  end
+
+  describe 'GET #route with valid parameters' do
+
+    before(:each) do
+      mesh_params = build(:valid_mesh)
+      post :create, mesh_params, format: :json
+    end
+
+    it 'should return the correct path and cost' do
+
+      route_params = {
+        :map_name => "SP",
+        :origin => "A",
+        :destiny => "D",
+        :autonomy => 10,
+        :liter_value => 2.5,
+      }
+
+      get :route, route_params, format: :json
+
+      expect(response).to have_http_status(200)
+
+      body_response = JSON.parse(response.body, :symbolize_names => true)
+      data = body_response[:data]
+
+      expect(data[:cost]).to be 6.25
+      expect(data[:path]).to eql "A B D"
+
+    end
+
+    it 'should return path not found' do
+
+      route_params = {
+        :map_name => "SP",
+        :origin => "A",
+        :destiny => "Z",
+        :autonomy => 10,
+        :liter_value => 2.5,
+      }
+
+      get :route, route_params, format: :json
+
+      expect(response).to have_http_status(200)
+
+      body_response = JSON.parse(response.body, :symbolize_names => true)
+      data = body_response[:data]
+
+      expect(body_response[:message].downcase).to include("not found")
+      expect(data).to be nil
+
+    end
+
+  end
+
+
+
+
+  describe 'GET #route with INVALID parameters' do
+
+    before(:each) do
+      mesh_params = build(:valid_mesh)
+      post :create, mesh_params, format: :json
+    end
+
+    it 'should return a error if origin is blank' do
+
+      route_params = {
+        :map_name => "SP",
+        :origin => "",
+        :destiny => "D",
+        :autonomy => 10,
+        :liter_value => 2.5
+      }
+
+      get :route, route_params, format: :json
+
+      expect(response).to have_http_status(422)
+
+      body_response = JSON.parse(response.body, :symbolize_names => true)
+      error = body_response[:errors].first
+
+      expect(error).to include("be blank")
+
+    end
+
+
+    it 'should return a error if destiny is blank' do
+
+      route_params = {
+        :map_name => "SP",
+        :origin => "A",
+        :destiny => "",
+        :autonomy => 10,
+        :liter_value => 2.5
+      }
+
+      get :route, route_params, format: :json
+
+      expect(response).to have_http_status(422)
+
+      body_response = JSON.parse(response.body, :symbolize_names => true)
+      error = body_response[:errors].first
+
+      expect(error).to include("be blank")
+
+    end
+
+    it 'should return a error if autonomy is blank' do
+
+      route_params = {
+        :map_name => "SP",
+        :origin => "A",
+        :destiny => "B",
+        :liter_value => 2.5
+      }
+
+      get :route, route_params, format: :json
+
+      expect(response).to have_http_status(422)
+
+      body_response = JSON.parse(response.body, :symbolize_names => true)
+      error = body_response[:errors].first
+
+      expect(error).to include("not a number")
+
+    end
+
+    it 'should return a error if liter_value is blank' do
+
+      route_params = {
+        :map_name => "SP",
+        :origin => "A",
+        :destiny => "B",
+        :autonomy => 10,
+        :liter_value => nil
+      }
+
+      get :route, route_params, format: :json
+
+      expect(response).to have_http_status(422)
+
+      body_response = JSON.parse(response.body, :symbolize_names => true)
+      error = body_response[:errors].first
+
+      expect(error).to include("not a number")
+
+    end
+
+
+    it 'should return a error if autonomy has a negative value' do
+
+      route_params = {
+        :map_name => "SP",
+        :origin => "A",
+        :destiny => "B",
+        :autonomy => -10,
+        :liter_value => 2.5
+      }
+
+      get :route, route_params, format: :json
+
+      expect(response).to have_http_status(422)
+
+      body_response = JSON.parse(response.body, :symbolize_names => true)
+      error = body_response[:errors].first
+
+      expect(error).to include("greater than")
+
+    end
+
+
+    it 'should return a error if autonomy has a negative value' do
+
+      route_params = {
+        :map_name => "SP",
+        :origin => "A",
+        :destiny => "B",
+        :autonomy => 10,
+        :liter_value => -2.5
+      }
+
+      get :route, route_params, format: :json
+
+      expect(response).to have_http_status(422)
+
+      body_response = JSON.parse(response.body, :symbolize_names => true)
+      error = body_response[:errors].first
+
+      expect(error).to include("greater than")
+
+    end
 
   end
 
