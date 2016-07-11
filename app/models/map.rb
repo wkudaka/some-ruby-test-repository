@@ -62,6 +62,19 @@ class Map
 
   end
 
+  def self.search(params, actual_page, per_page)
+    name = params[:name]
+
+    map_query = Map
+
+    if name.present?
+      map_query = map_query.where("result_map.name =~ {name}").params(name:".*#{name}.*")
+    end
+
+
+    map_query.order(created_at: :desc).page(actual_page).per(per_page)
+  end
+
   def self.calculate_cost(distance, autonomy, liter_value)
     used_liters = (distance.to_f / autonomy.to_f) * liter_value.to_f
   end

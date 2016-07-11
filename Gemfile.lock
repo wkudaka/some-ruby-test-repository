@@ -64,6 +64,13 @@ GEM
     httpclient (2.8.0)
     i18n (0.7.0)
     json (1.8.3)
+    kaminari (0.17.0)
+      actionpack (>= 3.0.0)
+      activesupport (>= 3.0.0)
+    kaminari-neo4j (0.0.4)
+      activesupport (>= 3.0)
+      kaminari (>= 0.16.3)
+      neo4j (>= 4.0)
     loofah (2.0.3)
       nokogiri (>= 1.5.9)
     mail (2.6.4)
@@ -176,6 +183,7 @@ DEPENDENCIES
   byebug
   database_cleaner
   factory_girl_rails
+  kaminari-neo4j
   neo4j (~> 7.0.0)
   rails (= 4.2.6)
   rails-api

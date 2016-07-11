@@ -7,7 +7,7 @@ RSpec.describe LogisticMeshesController, type: :controller do
     it 'creates a map with points' do
 
       mesh_params = build(:valid_mesh)
-      
+
       post :create, mesh_params, format: :json
       expect(response).to have_http_status(201)
 
@@ -293,5 +293,75 @@ RSpec.describe LogisticMeshesController, type: :controller do
 
   end
 
+
+  describe 'GET #index' do
+
+    before(:each) do
+      5.times do |index|
+        mesh_params = build(:valid_mesh, :name => "Some data #{index}" )
+        post :create, mesh_params, format: :json
+      end
+    end
+
+    describe 'GET #index with valid parameters' do
+
+      it 'should return a list of maps' do
+
+        params = {}
+
+        get :index, params, format: :json
+
+        expect(response).to have_http_status(200)
+
+        body_response = JSON.parse(response.body, :symbolize_names => true)
+        data = body_response[:data]
+
+        expect(data.count).to be 5
+        expect(body_response[:total_pages]).to be 1
+        expect(body_response[:total_count]).to be 5
+        expect(body_response[:actual_page]).to be 1
+
+      end
+
+      it 'should return the correct number of maps based on the per_page parameter' do
+
+        params = {
+          :per_page => 1
+        }
+
+        get :index, params, format: :json
+
+        body_response = JSON.parse(response.body, :symbolize_names => true)
+        data = body_response[:data]
+
+        expect(data.count).to be 1
+        expect(body_response[:total_pages]).to be 5
+        expect(body_response[:total_count]).to be 5
+        expect(body_response[:actual_page]).to be 1
+
+      end
+
+      it 'should return the correct number of maps based on the name parameter' do
+
+        params = {
+          :name => "Some data 2"
+        }
+
+        get :index, params, format: :json
+
+        body_response = JSON.parse(response.body, :symbolize_names => true)
+        data = body_response[:data]
+
+        expect(data.count).to be 1
+        expect(body_response[:total_pages]).to be 1
+        expect(body_response[:total_count]).to be 1
+        expect(body_response[:actual_page]).to be 1
+
+      end
+
+    end
+
+
+  end
 
 end

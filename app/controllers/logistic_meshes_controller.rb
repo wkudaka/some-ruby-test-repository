@@ -2,6 +2,21 @@ class LogisticMeshesController < ApplicationController
 
   def index
 
+    actual_page = params[:actual_page]
+    actual_page = 1 if actual_page.blank?
+
+    per_page = params[:per_page]
+    per_page = 10 if per_page.blank? || per_page.to_i > 100
+
+    maps = Map.search(params, actual_page, per_page)
+
+    render json:{
+        data: maps,
+        total_pages: maps.total_pages,
+        total_count: maps.total_count,
+        actual_page: actual_page
+
+    }
   end
 
   def route
