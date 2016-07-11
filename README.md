@@ -39,11 +39,13 @@ curl --form "mesh=@test.txt;filename=desired-filename.txt" --form name=SP  http:
 
 GET http://localhost:3000/logistic_meshes  
 Para consultar uma listagem de mapas, será necessário fazer uma requisição via GET para o link acima com os seguintes parâmetros:
-| Parâmetro        | Tipo        | Descrição   | Exemplo  | Valor Default |
-| ------------- |:----------:|---:| -----:| --------:|
-| per_page      | Integer | Itens por página (até 100 itens) | 5 | 10 |
-| actual_page      | Integer      | Página atual |   3  | 1 |
-| name      | String     | Filtragem por nome |   SP  | - |
+
+| Parâmetro        | Tipo        | Descrição   | Valor Default  |
+| ------------- |:----------:|---:| -----:|
+| per_page      | Integer | Itens por página (até 100 itens) | 10 |
+| actual_page      | Integer      | Página atual |   1  |
+| name      | String     | Filtragem por nome |   NULO  |
+
 
 Uma requisição GET pode ser enviada pelo navegador mesmo, exemplo:  
 http://localhost:3000/logistic_meshes?per_page=1&actual_page=1&name=SP
