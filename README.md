@@ -22,7 +22,7 @@ Pelo problema envolver grafos, guardar os dados em um banco de dados relacionado
 
 # Como usar
 Link para criação de malhas:  
-POST http://localhost:3000/logistic_meshes  
+**POST http://localhost:3000/logistic_meshes**  
 Para criar uma malha será necessário fazer uma requisição POST para o link acima com os seguintes parâmetros:
 
 | Parâmetro        | Tipo | Descrição           | Exemplo  |
@@ -37,7 +37,7 @@ Para criar uma malha será necessário fazer uma requisição POST para o link a
 curl --form "mesh=@test.txt;filename=desired-filename.txt" --form name=SP  http://localhost:3000/logistic_meshes
 ```
 
-GET http://localhost:3000/logistic_meshes  
+**GET http://localhost:3000/logistic_meshes**  
 Para consultar uma listagem de mapas, será necessário fazer uma requisição via GET para o link acima com os seguintes parâmetros:
 
 | Parâmetro        | Tipo        | Descrição   | Valor Default  |
@@ -50,7 +50,7 @@ Para consultar uma listagem de mapas, será necessário fazer uma requisição v
 Uma requisição GET pode ser enviada pelo navegador mesmo, exemplo:  
 http://localhost:3000/logistic_meshes?per_page=1&actual_page=1&name=SP
 
-GET http://localhost:3000/logistic_meshes/route  
+**GET http://localhost:3000/logistic_meshes/route**  
 Para consultar o menor caminho entre 2 pontos, será necessário fazer uma requisição via GET para o link acima com os seguintes parâmetros:  
 
 | Parâmetro        | Tipo        | Descrição   | Exemplo  |
