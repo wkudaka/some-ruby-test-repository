@@ -2,7 +2,7 @@
 
 # Instalação  
 Para ter menos problemas com configuração de ambiente foi usado o Docker:  
-1. [Link com informações de instalação do Docker](https://www.docker.com/products/docker)
+1. [Link com informações de instalação do Docker](https://www.docker.com/products/docker)    
 2. [Link de instalação do Docker-compose](https://docs.docker.com/compose/install/)
 
 Feito a instalação do Docker, entre no diretório da aplicação e execute o seguinte comando:  
