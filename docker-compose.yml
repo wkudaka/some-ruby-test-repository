@@ -10,7 +10,7 @@ services:
   db_dev:
     image: iborojevic/neo4j-apoc
     volumes:
-      - ./db_data:/var/lib/neo4j/data
+      - ./neo4j_data:/var/lib/neo4j/data
     environment:
       NEO4J_AUTH: none
     ports:
@@ -20,7 +20,7 @@ services:
     links:
       - db_test
       - db_dev:db_dev
-    entrypoint: ./wait-for-it.sh -t 30 db_dev:7474 -- bundle exec rails s -p 3000 -b '0.0.0.0'
+    entrypoint: ./wait-for-it.sh -t 45 db_dev:7474 -- bundle exec rails s -p 3000 -b '0.0.0.0'
     volumes:
       - .:/myapp
     ports:
