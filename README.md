@@ -37,6 +37,17 @@ Para criar uma malha será necessário fazer uma requisição POST para o link a
 curl --form "mesh=@test.txt;filename=desired-filename.txt" --form name=SP  http://localhost:3000/logistic_meshes
 ```
 
+GET http://localhost:3000/logistic_meshes  
+Para consultar uma listagem de mapas, será necessário fazer uma requisição via GET para o link acima com os seguintes parâmetros:
+| Parâmetro        | Tipo        | Descrição   | Exemplo  | Valor Default |
+| ------------- |:----------:|---:| -----:| --------:|
+| per_page      | Integer | Itens por página (até 100 itens) | 5 | 10 |
+| actual_page      | Integer      | Página atual |   3  | 1 |
+| name      | String     | Filtragem por nome |   SP  | - |
+
+Uma requisição GET pode ser enviada pelo navegador mesmo, exemplo:  
+http://localhost:3000/logistic_meshes?per_page=1&actual_page=1&name=SP
+
 GET http://localhost:3000/logistic_meshes/route  
 Para consultar o menor caminho entre 2 pontos, será necessário fazer uma requisição via GET para o link acima com os seguintes parâmetros:  
 
