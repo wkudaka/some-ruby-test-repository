@@ -1,0 +1,29 @@
+version: '2'
+services:
+  db_test:
+    image: iborojevic/neo4j-apoc
+    environment:
+      NEO4J_AUTH: none
+    ports:
+      - "7475:7475"
+
+  db_dev:
+    image: iborojevic/neo4j-apoc
+    volumes:
+      - ./db_data:/var/lib/neo4j/data
+    environment:
+      NEO4J_AUTH: none
+    ports:
+      - "7474:7474"
+  web:
+    build: .
+    links:
+      - db_test
+      - db_dev:db_dev
+    entrypoint: ./wait-for-it.sh -t 30 db_dev:7474 -- bundle exec rails s -p 3000 -b '0.0.0.0'
+    volumes:
+      - .:/myapp
+    ports:
+      - "3000:3000"
+    depends_on:
+      - db_dev
